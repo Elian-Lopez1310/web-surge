@@ -2,21 +2,29 @@ name: Deploy to Surge
 
 on:
   push:
-    branches: [ "main" ]
-  workflow_dispatch:
+    branches: [ "main" ]   
+  workflow_dispatch:       
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: "20"
-      - run: npm i -g surge
+
+      - name: Install Surge CLI
+        run: npm i -g surge
+
+    
+
       - name: Deploy to surge.sh
         env:
-          SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
-          SURGE_DOMAIN: ${{ secrets.SURGE_DOMAIN }}
+          SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}   
+          SURGE_DOMAIN: ${{ secrets.SURGE_DOMAIN }} 
         run: surge --project . --domain "$SURGE_DOMAIN" --token "$SURGE_TOKEN"
